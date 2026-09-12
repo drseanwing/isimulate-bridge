@@ -19,7 +19,7 @@ record anywhere of the iSimulate REALITi control protocol**:
 | mDNS/DNS-SD discovery via `_realiti_v1._tcp` | `src/service_discovery.c` |
 | WebSocket transport, target `/`, JSON text frames | `src/websocket_session.cpp` |
 | The full connect handshake and 14 packet types | `src/iSimulateBridge.cpp` |
-| The 28 REALITi monitor model IDs | `src/cl_arguments.c` |
+| The REALITi monitor model IDs (25 named, in the range 1–28) | `src/cl_arguments.c` |
 
 Those 1,135 lines are the sole reference behind
 **[`simlink/docs/REALITI-PROTOCOL.md`](https://github.com/drseanwing/simlink/blob/main/docs/REALITI-PROTOCOL.md)**,
@@ -54,10 +54,14 @@ Recorded in full in the *"Not evidenced by the reference"* section of
   source. qCPR → REALITi CPR display therefore cannot be built from this
   evidence. Closing it needs a WebSocket capture of iSimulate's own CPR-capable
   controller.
-- **Waveform IDs are almost entirely unknown.** Only three are evidenced:
-  `ecgWaveform` 14 = ventricular tachycardia, and etCO2 0/1/2 =
-  normal/obstructive-1/obstructive-2. The other ECG morphologies are not
-  recoverable from this source.
+- **Waveform IDs are almost entirely unknown.** `ecgWaveform` evidences only
+  two values — `9` = sinus (`src/iSimulateBridge.cpp:53`, corroborated at
+  `:304`) and `14` = ventricular tachycardia (`:388`) — against 33 members of
+  Laerdal's `BasicRhythmEnum`. `bpWaveform`/`spo2Waveform` `0` = normal and
+  etCO2 `0`/`1`/`2` = normal/obstructive-1/obstructive-2 are also evidenced.
+  The two known ECG IDs are not ordered by clinical family (9 sinus, 14 VT,
+  10–13 unknown), so the remaining 31 morphologies cannot be interpolated and
+  are not recoverable from this source.
 
 ### Modification policy
 
